@@ -23,7 +23,7 @@ resource "aws_subnet" "privatesubnet" {
 
 resource "aws_eks_cluster" "private_eks" {
   name     = "my-eks-cluster"
-  role_arn = aws_iam_role.eks_cluster_role.arn
+  role_arn = aws_iam_role.cluster.arn
   version = "1.21"
 
   vpc_config {
