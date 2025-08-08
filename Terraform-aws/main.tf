@@ -23,7 +23,6 @@ resource "aws_subnet" "privatesubnet" {
 
 resource "aws_eks_cluster" "private_eks" {
   name     = "my-eks-cluster"
-  role_arn = aws_iam_role.eks_cluster_role.arn
   version = "1.21"
 
   vpc_config {
@@ -45,5 +44,4 @@ resource "aws_db_instance" "rds_instance" {
   password = "12387654"
   username = "admin"
   storage_type = "gp2"
-  vpc_security_group_ids = [aws_security_group.db_sg.id]
 }
