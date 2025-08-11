@@ -112,7 +112,7 @@ resource "aws_instance" "bastion" {
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.publicsubnet.id
   associate_public_ip_address = true
-  key_name                    = "my-keypair" 
+  key_name                    = "pro" 
 
   tags = {
     Name = "BastionHost"
