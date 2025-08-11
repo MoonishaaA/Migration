@@ -108,11 +108,11 @@ resource "aws_db_instance" "rds_instance" {
 }
 
 resource "aws_instance" "bastion" {
-  ami                         = "ami-0c02fb55956c7d316" # Amazon Linux 2 (us-east-1)
+  ami                         = "ami-0c02fb55956c7d316" 
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.publicsubnet.id
   associate_public_ip_address = true
-  key_name                    = "my-keypair" # change to your existing key pair
+  key_name                    = "my-keypair" 
 
   tags = {
     Name = "BastionHost"
