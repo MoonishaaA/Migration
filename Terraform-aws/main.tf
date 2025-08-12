@@ -5,13 +5,6 @@ resource "aws_vpc" "mvpc" {
   }
 }
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.mvpc.id
-  tags = {
-    Name = "MyIGW"
-  }
-}
-
 resource "aws_subnet" "publicsubnet" {
   vpc_id                  = aws_vpc.mvpc.id
   cidr_block              = "10.0.1.0/24"
@@ -29,24 +22,6 @@ resource "aws_subnet" "privatesubnet" {
   tags = {
     Name = "MyPrivateSubnet"
   }
-}
-
-resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.mvpc.id
-  tags = {
-    Name = "PublicRouteTable"
-  }
-}
-
-resource "aws_route" "public_internet_access" {
-  route_table_id         = aws_route_table.public_rt.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw.id
-}
-
-resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.publicsubnet.id
-  route_table_id = aws_route_table.public_rt.id
 }
 
 resource "aws_iam_role" "eks_cluster_role" {
@@ -93,63 +68,6 @@ resource "aws_eks_cluster" "private_eks" {
   depends_on = [
     aws_iam_role_policy_attachment.eks_cluster_AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks_cluster_AmazonEKSServicePolicy
-  ]
-}
-
-resource "aws_iam_role" "eks_node_role" {
-  name = "eksNodeRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "eks_worker_node_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.eks_node_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.eks_node_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "ec2_container_registry_readonly" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_node_role.name
-}
-
-resource "aws_eks_node_group" "private_nodes" {
-  cluster_name    = aws_eks_cluster.private_eks.name
-  node_group_name = "private-nodes"
-  node_role_arn   = aws_iam_role.eks_node_role.arn
-  subnet_ids      = [
-    aws_subnet.privatesubnet.id,
-    aws_subnet.publicsubnet.id
-  ]
-
-  scaling_config {
-    desired_size = 2
-    max_size     = 3
-    min_size     = 1
-  }
-
-  instance_types = ["t3.medium"]
-  ami_type       = "AL2_x86_64"
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_worker_node_policy,
-    aws_iam_role_policy_attachment.eks_cni_policy,
-    aws_iam_role_policy_attachment.ec2_container_registry_readonly
   ]
 }
 
