@@ -12,15 +12,3 @@ aws eks --region us-east-1 update-kubeconfig --name ${aws_eks_cluster.private_ek
 EOT
 }
 
-output "db_endpoint" {
-  value = aws_db_instance.wordpress.address
-}
-
-output "db_username" {
-  value = aws_db_instance.wordpress.username
-}
-
-output "db_password" {
-  value     = var.db_password
-  sensitive = true
-}

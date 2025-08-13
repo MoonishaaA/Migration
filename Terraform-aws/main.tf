@@ -82,22 +82,3 @@ resource "aws_db_instance" "rds_instance" {
   storage_type         = "gp2"
   skip_final_snapshot  = true
 }
-resource "aws_security_group" "rds_sg" {
-  name        = "rds-sg"
-  description = "Allow MySQL access from EKS"
-  vpc_id      = aws_vpc.mvpc.id
-
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    security_groups = [aws_eks_cluster.private_eks.cluster_security_group_id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
