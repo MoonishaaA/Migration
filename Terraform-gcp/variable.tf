@@ -1,20 +1,19 @@
-variable "host_project_id" {
-  description = "The host project ID"
+variable "vpc_name" {
+  description = "The name of the VPC"
   type        = string
 }
 
-variable "service_project_id" {
-  description = "The service project ID"
+variable "subnet_name" {
+  description = "The name of the subnet"
+  type        = string
+}
+
+variable "subnet_cidr" {
+  description = "The CIDR block for the subnet"
   type        = string
 }
 
 variable "region" {
-  description = "Region for subnets"
-  type        = string
-  default     = "us-central1"
-}
-
-variable "service_account_email" {
-  description = "Service account in service project that will use the VPC"
+  description = "The GCP region"
   type        = string
 }
