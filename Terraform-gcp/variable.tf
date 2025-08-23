@@ -1,19 +1,52 @@
-variable "vpc_name" {
-  description = "The name of the VPC"
-  type        = string
-}
-
-variable "subnet_name" {
-  description = "The name of the subnet"
-  type        = string
-}
-
-variable "subnet_cidr" {
-  description = "The CIDR block for the subnet"
+variable "project_id" {
+  description = "GCP project ID"
   type        = string
 }
 
 variable "region" {
-  description = "The GCP region"
+  description = "GCP region"
   type        = string
+}
+
+# Networking
+variable "vpc_name" {
+  type = string
+}
+variable "subnet_name" {
+  type = string
+}
+variable "subnet_cidr" {
+  type = string
+}
+
+# Cluster
+variable "cluster_name" {
+  type = string
+}
+
+# Bucket
+variable "bucket_name" {
+  type = string
+}
+
+# Secret Manager
+variable "secret_id" {
+  type = string
+}
+
+# SQL
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
+
+variable "db_user" {
+  description = "Database username"
+  type        = string
+}
+
+variable "db_password" {
+  description = "Database password"
+  type        = string
+  sensitive   = true
 }
