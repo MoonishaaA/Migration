@@ -1,1 +1,41 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mm-wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mm-wordpress
+  template:
+    metadata:
+      labels:
+        app: mm-wordpress
+    spec:
+      containers:
+        - name: mm-wordpress
+          image: us-central1-docker.pkg.dev/my-project-learning-464616/wordpress-repo/my-wordpress:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: "10.29.0.5"
+            - name: WORDPRESS_DB_NAME
+              value: "mydatabase"
+            - name: WORDPRESS_DB_USER
+              value: "dbadmin"
+            - name: WORDPRESS_DB_PASSWORD
+              value: mmpass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mm-wordpress
+spec:
+  type: LoadBalancer
+  selector:
+    app: mm-wordpress
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
