@@ -23,3 +23,5 @@ db_password = "SuperSecret123!"  # Can also use Terraform variables or secrets
 # SQL
 db_name = "mydatabase"
 db_user = "dbadmin"
+
+boot_image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts"
