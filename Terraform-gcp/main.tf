@@ -1,5 +1,4 @@
-
-# Networking Module
+#Networking Module
 module "networking" {
   source        = "./modules/networking"
   vpc_name      = var.vpc_name
@@ -15,6 +14,7 @@ module "compute" {
   region    = var.region
   vpc_id    = module.networking.vpc_id
   subnet_id = module.networking.subnet_id
+  boot_image  = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts"
 }
 
 # Cluster Module
@@ -29,8 +29,10 @@ module "cluster" {
 # Bucket Module
 module "bucket" {
   source      = "./modules/bucket"
-  bucket_name = var.bucket_name
+  bucket_name = "my-gke-cluster"
   region      = var.region
+  project = var.project_id
+ 
 }
 
 # Secret Manager Module
