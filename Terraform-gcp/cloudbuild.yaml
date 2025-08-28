@@ -1,1 +1,29 @@
+substitutions:
+  _GKE_CLUSTER_NAME: "my-gke-cluster"
+  _GKE_CLUSTER_REGION: "us-central1-a"
 
+steps:
+  # Step 1: Authenticate with GKE and deploy
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    script: |
+      #!/bin/bash
+      gcloud container clusters get-credentials $_GKE_CLUSTER_NAME \
+        --zone $_GKE_CLUSTER_REGION \
+        --project my-project-learning-464616
+
+      kubectl apply -f deployment.yaml
+
+  # Step 2: Send Slack notification
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Send Slack Notification'
+    script: |
+      #!/bin/bash
+      # Direct Slack webhook URL (replace with your actual URL)
+      WEBHOOK_URL="https://hooks.slack.com/services/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"
+
+      curl -X POST -H 'Content-type: application/json' --data '{
+        "text": "✅ Cloud Build completed successfully for *$_GKE_CLUSTER_NAME* in project *my-project-learning-464616*."
+      }' $WEBHOOK_URL
+
+options:
+  logging: CLOUD_LOGGING_ONLY
