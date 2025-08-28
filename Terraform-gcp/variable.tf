@@ -28,6 +28,11 @@ variable "cluster_name" {
 variable "bucket_name" {
   type = string
 }
+variable "boot_image" {
+  description = "Boot disk image for compute instance"
+  type        = string
+  default     = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts"
+}
 
 # Secret Manager
 variable "secret_id" {
